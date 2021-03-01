@@ -28,13 +28,13 @@
 # 0:1.3
 
 # 1:GAMEDIR, VERSIONFILE [, GITHUBREPO ]
-1:PersistentRotation, PersistentRotation.version
+1:PersistentRotation, PersistentRotationUpgraded.version
 
 # 2:PROJNAME, PROJFILE, VERSIONFILE, PLUGINSFOLDER
-2:KerbalHotSeat,Source/PersistentRotation.csproj,PersistentRotation.version,GameData/PersistentRotation/Plugins
+2:PersistentRotation,Source/PersistentRotation.csproj,PersistentRotationUpgraded.version,GameData/PersistentRotation/Plugins
 
 # 3:SOURCEFILE, DESTDIR
-3:PersistentRotation.version,GameData/PersistentRotation
+3:PersistentRotationUpgraded.version,GameData/PersistentRotation
 3:LICENSE.txt,GameData/PersistentRotation
 3:README.md,GameData/PersistentRotation
 

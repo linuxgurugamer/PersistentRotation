@@ -25,7 +25,7 @@ rem README is the readme file
 
 set GAMEDIR=PersistentRotation
 set GAMEDATA="GameData\"
-set VERSIONFILE=%GAMEDIR%.version
+set VERSIONFILE=PersistentRotationUpgraded.version
 set LICENSE=License.txt
 set README=ReadMe.md
 
