@@ -12,3 +12,7 @@ Changelog
 
 1.9.1.1
 	Changed main git branch to master
+
+1.9.1.2
+	Thanks to user @avalanchas for this
+		German translation
