@@ -9,13 +9,3 @@ Changelog
 	Added button referencing generic toolbar
 	Added new .version file (Upgraded)
 	Added LGG local build files
-
-1.9.1.1
-	Changed main git branch to master
-
-1.9.1.2
-	Thanks to user @avalanchas for this
-		German translation
-        
-1.9.1.3
-    Fixed german translation
