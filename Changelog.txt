@@ -19,3 +19,8 @@ Changelog
         
 1.9.1.3
     Fixed german translation
+
+1.9.1.4
+	Thanks to user @Tacombel for this
+		Spanish translation
+	Added support for Retrograde

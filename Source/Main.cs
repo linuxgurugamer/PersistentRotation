@@ -116,9 +116,11 @@ namespace PersistentRotation
 
                         //Debug.Log("[PR] - currentStabilityMode: " + Enum.GetName(typeof(StabilityMode), currentStabilityMode));
 
-                        if (currentStabilityMode == StabilityMode.PROGRADE)
+                        if (currentStabilityMode == StabilityMode.PROGRADE || currentStabilityMode == StabilityMode.RETROGRADE)
                         {
-                            var rotation = Quaternion.FromToRotation(vessel.transform.up.normalized, vessel.obt_velocity.normalized);
+                            var rotation = Quaternion.FromToRotation(
+                                (currentStabilityMode == StabilityMode.PROGRADE ? 1 : -1) *
+                                vessel.transform.up.normalized, vessel.obt_velocity.normalized);
 
                             vessel.transform.Rotate(rotation.eulerAngles, Space.World);
 
@@ -330,7 +332,7 @@ namespace PersistentRotation
             _angularVelocity.z = v.storedAngularMomentum.z / v.vessel.MOI.z;
 
             if (v.vessel.situation != Vessel.Situations.LANDED && v.vessel.situation != Vessel.Situations.SPLASHED && v.vessel.situation != Vessel.Situations.PRELAUNCH)
-                v.vessel.SetRotation(Quaternion.AngleAxis(_angularVelocity.magnitude * TimeWarp.CurrentRate, v.vessel.ReferenceTransform.rotation  * _angularVelocity) * v.vessel.transform.rotation, true);
+                v.vessel.SetRotation(Quaternion.AngleAxis(_angularVelocity.magnitude * TimeWarp.CurrentRate, v.vessel.ReferenceTransform.rotation * _angularVelocity) * v.vessel.transform.rotation, true);
         }
         private void PackedRotation(Data.PRVessel v)
         {
@@ -387,7 +389,7 @@ namespace PersistentRotation
             {
                 if (!p.GetComponent<Rigidbody>()) continue;
                 if (p.mass == 0f) continue;
-                Rigidbody partrigidbody = p.GetComponent<Rigidbody> ();
+                Rigidbody partrigidbody = p.GetComponent<Rigidbody>();
 
                 //Store the Rigidbody's max angular velocity for later restoration.
                 if (!RigidBodyMaxAngularVelocityPairs.ContainsKey(partrigidbody))
@@ -395,15 +397,15 @@ namespace PersistentRotation
                 RigidBodyMaxAngularVelocityPairs[partrigidbody].FrameCounter = 10;
                 partrigidbody.maxAngularVelocity *= 10f;
 
-                partrigidbody.AddTorque( av_by_rotation, ForceMode.VelocityChange );
-                partrigidbody.AddForce( Vector3d.Cross (av_by_rotation, (Vector3d)p.WCoM - COM), ForceMode.VelocityChange);
+                partrigidbody.AddTorque(av_by_rotation, ForceMode.VelocityChange);
+                partrigidbody.AddForce(Vector3d.Cross(av_by_rotation, (Vector3d)p.WCoM - COM), ForceMode.VelocityChange);
             }
         }
 
         private Quaternion FromToRotation2(Vector3d fromv, Vector3d tov) //Stock FromToRotation() doesn't work correctly
         {
             double dot = Vector3d.Dot(fromv, tov);
-            
+
 
             if (dot > 0.999999 || dot < -0.999999)
                 return Quaternion.identity; //  new Quaternion(0, 0, 0, 0);
@@ -441,7 +443,8 @@ namespace PersistentRotation
             ABSOLUTE,
             RELATIVE,
             AUTOPILOT, //When MechJeb controls the vessel, this will be removed when MechJeb waits to enter warp until momentum is zero.
-            PROGRADE
+            PROGRADE,
+            RETROGRADE
         }
         private StabilityMode GetStabilityMode(Vessel vessel)
         {
@@ -461,6 +464,8 @@ namespace PersistentRotation
                     return StabilityMode.RELATIVE;
                 else if (vessel.Autopilot.Mode == VesselAutopilot.AutopilotMode.Prograde)
                     return StabilityMode.PROGRADE;
+                else if (vessel.Autopilot.Mode == VesselAutopilot.AutopilotMode.Retrograde)
+                    return StabilityMode.RETROGRADE;
                 else
                     return StabilityMode.ABSOLUTE;
             }
