@@ -127,59 +127,25 @@ namespace PersistentRotation
                             v.vessel.SetRotation(vessel.transform.rotation);
                         }
                         else
-#if false
                         if (v.storedAngularMomentum.magnitude < threshold && (currentStabilityMode == StabilityMode.NORMAL || currentStabilityMode == StabilityMode.ANTI_NORMAL))
                         {
-
-
-                            Vector3 burnV = vessel.obt_velocity;
-                            Vector3 yawnComponent = Vector3d.Exclude(vessel.GetTransform().forward, burnV);
-                            Vector3 crossp = Vector3.Cross(yawnComponent, vessel.GetTransform().right).normalized;
-                            double yawn = Vector3.SignedAngle(yawnComponent, vessel.GetTransform().up, crossp);
-                            if (yawn > 90)
+                            var attitude = Quaternion.LookRotation(Vector3d.right, Vector3d.up) * Quaternion.AngleAxis(0, Vector3d.forward);
+                            if (currentStabilityMode == StabilityMode.ANTI_NORMAL)
                             {
-                                yawn = yawn * -1f;
+                                var ea = attitude.eulerAngles;
+                                //ea.y += 180;
+                                ea.z += 180;
+
+                                attitude = Quaternion.Euler(ea);
                             }
-                            else if (yawn < -90)
-                            {
-                                yawn = yawn * -1f;
-                            }
+                            v.vessel.SetRotation(attitude);
 
-                            Vector3 pitchComponent = Vector3d.Exclude(vessel.GetTransform().right, burnV);
-                            crossp = Vector3.Cross(pitchComponent, vessel.GetTransform().forward).normalized;
-                            double pitch = Vector3.SignedAngle(pitchComponent, vessel.GetTransform().up, crossp);
-                            if (pitch > 90)
-                            {
-                                pitch = pitch * -1f;
-                            }
-                            else if (pitch < -90)
-                            {
-                                pitch = pitch * -1f;
-                            }
-
-                            var rotation = Quaternion.FromToRotation(
-                                crossp, vessel.obt_velocity.normalized);
-
-                            vessel.transform.Rotate(rotation.eulerAngles, Space.World);
-
-                            v.vessel.SetRotation(vessel.transform.rotation);
-
-#if false
-                            var rotation = Quaternion.FromToRotation(
-                                (currentStabilityMode == StabilityMode.NORMAL ? 1 : -1) *
-                               vessel.transform.up.normalized, vessel.obt_velocity.normalized);
-
-                            vessel.transform.Rotate(rotation.eulerAngles, Space.World);
-
-                            v.vessel.SetRotation(vessel.transform.rotation);
-#endif
                         }
                         else
-#endif
-                            if (v.storedAngularMomentum.magnitude < threshold && (currentStabilityMode == StabilityMode.RADIAL_OUT || currentStabilityMode == StabilityMode.RADIAN_IN))
+                            if (v.storedAngularMomentum.magnitude < threshold && (currentStabilityMode == StabilityMode.RADIAL_OUT || currentStabilityMode == StabilityMode.RADIAL_IN))
                         {
                             var rotation = Quaternion.FromToRotation(
-                                (currentStabilityMode == StabilityMode.RADIAN_IN ? 1 : -1) *
+                                (currentStabilityMode == StabilityMode.RADIAL_IN ? 1 : -1) *
                                 vessel.transform.up.normalized, FlightGlobals.ActiveVessel.upAxis);
 
                             vessel.transform.Rotate(rotation.eulerAngles, Space.World);
@@ -510,7 +476,7 @@ namespace PersistentRotation
             NORMAL,
             ANTI_NORMAL,
             RADIAL_OUT,
-            RADIAN_IN
+            RADIAL_IN
         }
         private StabilityMode GetStabilityMode(Vessel vessel)
         {
@@ -531,12 +497,12 @@ namespace PersistentRotation
                     case VesselAutopilot.AutopilotMode.Prograde: return StabilityMode.PROGRADE;
                     case VesselAutopilot.AutopilotMode.Retrograde: return StabilityMode.RETROGRADE;
 
-#if false
+#if true
                     case VesselAutopilot.AutopilotMode.Normal: return StabilityMode.NORMAL;
                     case VesselAutopilot.AutopilotMode.Antinormal: return StabilityMode.ANTI_NORMAL;
 #endif
                     case VesselAutopilot.AutopilotMode.RadialOut: return StabilityMode.RADIAL_OUT;
-                    case VesselAutopilot.AutopilotMode.RadialIn: return StabilityMode.RADIAN_IN;
+                    case VesselAutopilot.AutopilotMode.RadialIn: return StabilityMode.RADIAL_IN;
 
                 }
                 return StabilityMode.ABSOLUTE;
