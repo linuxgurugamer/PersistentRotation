@@ -24,3 +24,10 @@ Changelog
 	Thanks to user @Tacombel for this
 		Spanish translation
 	Added support for Retrograde
+
+1.9.1.5
+	Fixed Prograde & Retrograde from snapping during timewarp IF there is any current movement
+	Added Radial out and Radial in
+	Renamed DLL for CKAN compatibility
+	Added AssemblyFileVersion
+	Updated version file for 1.12

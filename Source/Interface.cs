@@ -423,48 +423,6 @@ namespace PersistentRotation
             disabled = !disabled;
         }
 
-#if falase
-        void DeleteBlizzyToolbar()
-        {
-            if (ToolbarManager.ToolbarAvailable)
-            {
-                if (button != null)
-                {
-                    button.Destroy();
-                }
-            }
-        }
-        void CreateStockToolbar()
-        {
-            if (!stockButton)
-            {
-                stockButton = ApplicationLauncher.Instance.AddModApplication(
-                () =>
-                {
-                    disabled = !disabled;
-                },
-                () =>
-                {
-                    disabled = !disabled;
-                },
-                null,
-                null,
-                null,
-                null,
-                ApplicationLauncher.AppScenes.FLIGHT,
-                GameDatabase.Instance.GetTexture("PersistentRotation/Textures/texture", false)
-                );
-            }
-        }
-        void DeleteStockToolbar()
-        {
-            if (stockButton)
-            {
-                ApplicationLauncher.Instance.RemoveModApplication(stockButton);
-                stockButton = null;
-            }
-        }
-#endif
         void SaveGUI()
         {
             try

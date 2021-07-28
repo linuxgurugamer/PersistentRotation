@@ -116,7 +116,7 @@ namespace PersistentRotation
 
                         //Debug.Log("[PR] - currentStabilityMode: " + Enum.GetName(typeof(StabilityMode), currentStabilityMode));
 
-                        if (currentStabilityMode == StabilityMode.PROGRADE || currentStabilityMode == StabilityMode.RETROGRADE)
+                        if (v.storedAngularMomentum.magnitude < threshold && (currentStabilityMode == StabilityMode.PROGRADE || currentStabilityMode == StabilityMode.RETROGRADE))
                         {
                             var rotation = Quaternion.FromToRotation(
                                 (currentStabilityMode == StabilityMode.PROGRADE ? 1 : -1) *
@@ -126,7 +126,68 @@ namespace PersistentRotation
 
                             v.vessel.SetRotation(vessel.transform.rotation);
                         }
-                        else if (v.storedAngularMomentum.magnitude >= threshold)
+                        else
+#if false
+                        if (v.storedAngularMomentum.magnitude < threshold && (currentStabilityMode == StabilityMode.NORMAL || currentStabilityMode == StabilityMode.ANTI_NORMAL))
+                        {
+
+
+                            Vector3 burnV = vessel.obt_velocity;
+                            Vector3 yawnComponent = Vector3d.Exclude(vessel.GetTransform().forward, burnV);
+                            Vector3 crossp = Vector3.Cross(yawnComponent, vessel.GetTransform().right).normalized;
+                            double yawn = Vector3.SignedAngle(yawnComponent, vessel.GetTransform().up, crossp);
+                            if (yawn > 90)
+                            {
+                                yawn = yawn * -1f;
+                            }
+                            else if (yawn < -90)
+                            {
+                                yawn = yawn * -1f;
+                            }
+
+                            Vector3 pitchComponent = Vector3d.Exclude(vessel.GetTransform().right, burnV);
+                            crossp = Vector3.Cross(pitchComponent, vessel.GetTransform().forward).normalized;
+                            double pitch = Vector3.SignedAngle(pitchComponent, vessel.GetTransform().up, crossp);
+                            if (pitch > 90)
+                            {
+                                pitch = pitch * -1f;
+                            }
+                            else if (pitch < -90)
+                            {
+                                pitch = pitch * -1f;
+                            }
+
+                            var rotation = Quaternion.FromToRotation(
+                                crossp, vessel.obt_velocity.normalized);
+
+                            vessel.transform.Rotate(rotation.eulerAngles, Space.World);
+
+                            v.vessel.SetRotation(vessel.transform.rotation);
+
+#if false
+                            var rotation = Quaternion.FromToRotation(
+                                (currentStabilityMode == StabilityMode.NORMAL ? 1 : -1) *
+                               vessel.transform.up.normalized, vessel.obt_velocity.normalized);
+
+                            vessel.transform.Rotate(rotation.eulerAngles, Space.World);
+
+                            v.vessel.SetRotation(vessel.transform.rotation);
+#endif
+                        }
+                        else
+#endif
+                            if (v.storedAngularMomentum.magnitude < threshold && (currentStabilityMode == StabilityMode.RADIAL_OUT || currentStabilityMode == StabilityMode.RADIAN_IN))
+                        {
+                            var rotation = Quaternion.FromToRotation(
+                                (currentStabilityMode == StabilityMode.RADIAN_IN ? 1 : -1) *
+                                vessel.transform.up.normalized, FlightGlobals.ActiveVessel.upAxis);
+
+                            vessel.transform.Rotate(rotation.eulerAngles, Space.World);
+
+                            v.vessel.SetRotation(vessel.transform.rotation);
+                        }
+                        else
+                        if (v.storedAngularMomentum.magnitude >= threshold)
                         {
                             if (currentStabilityMode != StabilityMode.AUTOPILOT)
                             {
@@ -242,6 +303,7 @@ namespace PersistentRotation
 
             data.PRVessels.RemoveAll(v => v.processed == false);
         }
+
         private void OnDestroy()
         {
             instance = null;
@@ -444,7 +506,11 @@ namespace PersistentRotation
             RELATIVE,
             AUTOPILOT, //When MechJeb controls the vessel, this will be removed when MechJeb waits to enter warp until momentum is zero.
             PROGRADE,
-            RETROGRADE
+            RETROGRADE,
+            NORMAL,
+            ANTI_NORMAL,
+            RADIAL_OUT,
+            RADIAN_IN
         }
         private StabilityMode GetStabilityMode(Vessel vessel)
         {
@@ -459,15 +525,21 @@ namespace PersistentRotation
             else if (vessel.ActionGroups[KSPActionGroup.SAS] && data.FindPRVessel(vessel).mjMode == MechJebWrapper.SATarget.OFF && MechJebWrapper.GetMode(vessel) == MechJebWrapper.SATarget.OFF)
             {
                 /* Only stock SAS is enabled */
+                switch (vessel.Autopilot.Mode)
+                {
+                    case VesselAutopilot.AutopilotMode.StabilityAssist: return StabilityMode.RELATIVE;
+                    case VesselAutopilot.AutopilotMode.Prograde: return StabilityMode.PROGRADE;
+                    case VesselAutopilot.AutopilotMode.Retrograde: return StabilityMode.RETROGRADE;
 
-                if (vessel.Autopilot.Mode == VesselAutopilot.AutopilotMode.StabilityAssist)
-                    return StabilityMode.RELATIVE;
-                else if (vessel.Autopilot.Mode == VesselAutopilot.AutopilotMode.Prograde)
-                    return StabilityMode.PROGRADE;
-                else if (vessel.Autopilot.Mode == VesselAutopilot.AutopilotMode.Retrograde)
-                    return StabilityMode.RETROGRADE;
-                else
-                    return StabilityMode.ABSOLUTE;
+#if false
+                    case VesselAutopilot.AutopilotMode.Normal: return StabilityMode.NORMAL;
+                    case VesselAutopilot.AutopilotMode.Antinormal: return StabilityMode.ANTI_NORMAL;
+#endif
+                    case VesselAutopilot.AutopilotMode.RadialOut: return StabilityMode.RADIAL_OUT;
+                    case VesselAutopilot.AutopilotMode.RadialIn: return StabilityMode.RADIAN_IN;
+
+                }
+                return StabilityMode.ABSOLUTE;
             }
             else if (!vessel.ActionGroups[KSPActionGroup.SAS] && (data.FindPRVessel(vessel).mjMode != MechJebWrapper.SATarget.OFF || MechJebWrapper.GetMode(vessel) != MechJebWrapper.SATarget.OFF))
                 return StabilityMode.ABSOLUTE; /* Only SmartA.S.S. is enabled */
