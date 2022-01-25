@@ -118,9 +118,9 @@ namespace PersistentRotation
 
                         if (v.storedAngularMomentum.magnitude < threshold && (currentStabilityMode == StabilityMode.PROGRADE || currentStabilityMode == StabilityMode.RETROGRADE))
                         {
-                            var rotation = Quaternion.FromToRotation(
+                            var rotation = /* Quaternion. */ FromToRotation(
                                 (currentStabilityMode == StabilityMode.PROGRADE ? 1 : -1) *
-                                vessel.transform.up.normalized, vessel.obt_velocity.normalized);
+                                vessel.ReferenceTransform.up.normalized, vessel.obt_velocity.normalized);
 
                             vessel.transform.Rotate(rotation.eulerAngles, Space.World);
 
@@ -129,24 +129,27 @@ namespace PersistentRotation
                         else
                         if (v.storedAngularMomentum.magnitude < threshold && (currentStabilityMode == StabilityMode.NORMAL || currentStabilityMode == StabilityMode.ANTI_NORMAL))
                         {
+#if false
                             var attitude = Quaternion.LookRotation(Vector3d.right, Vector3d.up) * Quaternion.AngleAxis(0, Vector3d.forward);
+
                             if (currentStabilityMode == StabilityMode.ANTI_NORMAL)
                             {
                                 var ea = attitude.eulerAngles;
+
                                 //ea.y += 180;
                                 ea.z += 180;
-
                                 attitude = Quaternion.Euler(ea);
                             }
-                            v.vessel.SetRotation(attitude);
 
+                            v.vessel.SetRotation(attitude);
+#endif
                         }
                         else
                             if (v.storedAngularMomentum.magnitude < threshold && (currentStabilityMode == StabilityMode.RADIAL_OUT || currentStabilityMode == StabilityMode.RADIAL_IN))
                         {
-                            var rotation = Quaternion.FromToRotation(
+                            var rotation = /* Quaternion. */ FromToRotation(
                                 (currentStabilityMode == StabilityMode.RADIAL_IN ? 1 : -1) *
-                                vessel.transform.up.normalized, FlightGlobals.ActiveVessel.upAxis);
+                                vessel.ReferenceTransform.up.normalized, FlightGlobals.ActiveVessel.upAxis);
 
                             vessel.transform.Rotate(rotation.eulerAngles, Space.World);
 
@@ -181,11 +184,11 @@ namespace PersistentRotation
 
                     v.lastActive = false;
 
-                    #endregion
+#endregion
                 }
                 else
                 {
-                    #region ### UNPACKED ###
+#region ### UNPACKED ###
                     //Did this vessel just go off rails?
                     if (v.GoingOffRailsFrameCounter != -1)
                     {
@@ -259,13 +262,13 @@ namespace PersistentRotation
                         v.lastPosition = Vector3.zero;
                         v.lastActive = false;
                     }
-                    #endregion
+#endregion
                 }
 
                 v.lastTransform = vessel.ReferenceTransform;
                 v.lastReference = v.reference;
             }
-            #endregion
+#endregion
 
             data.PRVessels.RemoveAll(v => v.processed == false);
         }

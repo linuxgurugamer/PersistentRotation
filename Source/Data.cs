@@ -161,7 +161,7 @@ namespace PersistentRotation
 
             List<String> allPaths = GetAllPaths();
 
-            if(allPaths.Count() == 0)
+            if(allPaths.Count == 0)
             {
                 Debug.Log("[PR] No save files found.");
                 return;

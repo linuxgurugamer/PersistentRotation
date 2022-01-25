@@ -35,3 +35,9 @@ Changelog
 1.9.1.6
 	Added Normal and Anti-Normal
 	Fixed multiple dlls in release
+
+1.9.1.7
+	Fixed to use current control point
+	Disabled code for normal/anti-normal
+	Thanks to github user @Aebestach
+		Update zh-cn.cfg
