@@ -41,3 +41,7 @@ Changelog
 	Disabled code for normal/anti-normal
 	Thanks to github user @Aebestach
 		Update zh-cn.cfg
+
+1.9.1.8
+	Thanks to github user @ValiusV for this
+		Added fr-fr.cfg (French)
