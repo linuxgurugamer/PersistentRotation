@@ -42,9 +42,6 @@
     <Reference Include="ClickThroughBlocker">
       <HintPath>$(KSPDIR)\GameData\000_ClickThroughBlocker\Plugins\ClickThroughBlocker.dll</HintPath>
     </Reference>
-    <Reference Include="MechJeb2">
-      <HintPath>$(KSPDIR)\GameData\MechJeb2\Plugins\MechJeb2.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="ToolbarControl">
       <HintPath>$(KSPDIR)\GameData\001_ToolbarControl\Plugins\ToolbarControl.dll</HintPath>
