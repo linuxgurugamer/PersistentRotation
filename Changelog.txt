@@ -45,3 +45,7 @@ Changelog
 1.9.1.8
 	Thanks to github user @ValiusV for this
 		Added fr-fr.cfg (French)
+
+1.9.1.9
+	Thanks to github user @Aebestach for this:
+		Update zh-cn.cfg
