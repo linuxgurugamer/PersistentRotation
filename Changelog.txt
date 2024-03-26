@@ -49,3 +49,7 @@ Changelog
 1.9.1.9
 	Thanks to github user @Aebestach for this:
 		Update zh-cn.cfg
+
+1.9.1.10
+	Removed unnecessary debug lines which were spamming the log
+	Updated README.md

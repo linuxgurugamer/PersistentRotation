@@ -15,8 +15,8 @@ The rotation of your vessel will always stay the same relatively to the surface 
 So, if you have the body you orbit selected as reference for Body Relative Rotation, and have your vessel pointing towards the surface, even after half an orbit the vessel will still point towards it, not like in stock KSP, away from it. This doesn't only work for the body the vessel orbits around, but any other body or any vessel can be selected as reference, too. That means you could, for example, build telescopes that always point towards Mun or a sattelite always pointing at a space station. You can also utilize it to make your airplanes smoothly fly along the planets curvature. The Body Relative Rotation is completely persistent and works in timewarp and even in realtime, as long as the SAS is enabled.
 
 For more information, see:
-https://forum.kerbalspaceprogram.com/index.php?/topic/102277-14-persistentrotation-185/
+https://forum.kerbalspaceprogram.com/topic/201121-19x-110x-111x-persistent-rotation-upgraded/
 
 Source code of the mod is available at:
-https://github.com/markusa380/PersistentRotation
+https://github.com/linuxgurugamer/PersistentRotation/tree/8bf6c6c9415d2080fc984f16b86b29371f9c0985
 

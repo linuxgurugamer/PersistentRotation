@@ -195,16 +195,16 @@ namespace PersistentRotation
                 landingAutopilot = GetComputerModule(masterMechJeb, "MechJebModuleLandingAutopilot");
                 nodeExecutor = GetComputerModule(masterMechJeb, "MechJebModuleNodeExecutor");
                 rendezvousAutopilot = GetComputerModule(masterMechJeb, "MechJebModuleRendezvousAutopilot");
-                Debug.Log("[PR] MechJeb wrapper.Active  1");
+                //Debug.Log("[PR] MechJeb wrapper.Active  1");
                 if (ModuleEnabled(ascentAutopilot)) { }
 
-                Debug.Log("[PR] MechJeb wrapper.Active  2");
+                //Debug.Log("[PR] MechJeb wrapper.Active  2");
                 if (ModuleEnabled(landingAutopilot)) { }
-                Debug.Log("[PR] MechJeb wrapper.Active  3");
+                //Debug.Log("[PR] MechJeb wrapper.Active  3");
                 if (ModuleEnabled(nodeExecutor)) { }
-                Debug.Log("[PR] MechJeb wrapper.Active  4");
+                //Debug.Log("[PR] MechJeb wrapper.Active  4");
                 if (ModuleEnabled(rendezvousAutopilot)) { }
-                Debug.Log("[PR] MechJeb wrapper.Active  5");
+                //Debug.Log("[PR] MechJeb wrapper.Active  5");
 
 
                 if (ModuleEnabled(ascentAutopilot) || ModuleEnabled(landingAutopilot) || ModuleEnabled(nodeExecutor) || ModuleEnabled(rendezvousAutopilot))
