@@ -16,6 +16,7 @@ namespace PersistentRotation
             //General
             public Vessel vessel;
             public Vector3 storedAngularMomentum;
+            public Vector3 storedMOI;
             public Vector3 planetariumRight;
 
             //Cached data for when going off rails
@@ -117,6 +118,7 @@ namespace PersistentRotation
                 {
                     ConfigNode cn_vessel = save.AddNode(v.vessel.id.ToString());
                     cn_vessel.AddValue("MOMENTUM", KSPUtil.WriteVector(v.storedAngularMomentum));
+                    cn_vessel.AddValue("MOI", KSPUtil.WriteVector(v.storedMOI));
                     cn_vessel.AddValue("PLANETARIUM_RIGHT", KSPUtil.WriteVector(v.planetariumRight));
 
                     cn_vessel.AddValue("MJMODE", ((int)(v.mjMode)).ToString());
@@ -224,6 +226,7 @@ namespace PersistentRotation
                 {
                     Debug.Log("[PR] Found node for vessel " + v.vessel.vesselName);
                     v.storedAngularMomentum = KSPUtil.ParseVector3(cn_vessel.GetValue("MOMENTUM"));
+                    v.storedMOI = KSPUtil.ParseVector3(cn_vessel.GetValue("MOI") ?? "0,0,0");
                     v.planetariumRight = KSPUtil.ParseVector3(cn_vessel.GetValue("PLANETARIUM_RIGHT"));
                     v.mjMode = MechJebWrapper.saTargetMap[int.Parse(cn_vessel.GetValue("MJMODE"))];
                     v.rtMode = RemoteTechWrapper.acFlightModeMap[int.Parse(cn_vessel.GetValue("RTMODE"))];

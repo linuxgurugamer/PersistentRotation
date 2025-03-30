@@ -311,10 +311,10 @@ namespace PersistentRotation
         }
         private void OnVesselGoOnRails(Vessel vessel)
         {
-            //Nothing to do here
+            // MOI needs to be saved before packing / going on rails, as the value won't be available after that
+            data.FindPRVessel(vessel).storedMOI = vessel.MOI;
 
             //DEBUG
-            //Data.PRVessel v = data.FindPRVessel(vessel);
             //KSPLog.print(string.Format("GoOnRails angvel: {0}, stored: {1}", vessel.angularVelocityD, v.storedAngularMomentum));
         }
         private void OnVesselGoOffRails(Vessel vessel)
@@ -358,9 +358,9 @@ namespace PersistentRotation
         {
             Vector3 _angularVelocity = Vector3.zero;
 
-            _angularVelocity.x = v.storedAngularMomentum.x / v.vessel.MOI.x;
-            _angularVelocity.y = v.storedAngularMomentum.y / v.vessel.MOI.y;
-            _angularVelocity.z = v.storedAngularMomentum.z / v.vessel.MOI.z;
+            _angularVelocity.x = v.storedMOI.x == 0f ? 0f : v.storedAngularMomentum.x / v.storedMOI.x;
+            _angularVelocity.y = v.storedMOI.y == 0f ? 0f : v.storedAngularMomentum.y / v.storedMOI.y;
+            _angularVelocity.z = v.storedMOI.z == 0f ? 0f : v.storedAngularMomentum.z / v.storedMOI.z;
 
             if (v.vessel.situation != Vessel.Situations.LANDED && v.vessel.situation != Vessel.Situations.SPLASHED && v.vessel.situation != Vessel.Situations.PRELAUNCH)
                 v.vessel.SetRotation(Quaternion.AngleAxis(_angularVelocity.magnitude * TimeWarp.CurrentRate, v.vessel.ReferenceTransform.rotation * _angularVelocity) * v.vessel.transform.rotation, true);
