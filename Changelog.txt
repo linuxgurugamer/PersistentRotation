@@ -53,3 +53,8 @@ Changelog
 1.9.1.10
 	Removed unnecessary debug lines which were spamming the log
 	Updated README.md
+
+1.9.2
+	Thanks to @gotmachine for this:
+		Fixes bug with vessels not rotating until unpacked once, and and not rotating at all when KSPCF is installed
+	Updated version file to use github for new version info
