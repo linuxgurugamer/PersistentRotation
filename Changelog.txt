@@ -58,3 +58,7 @@ Changelog
 	Thanks to @gotmachine for this:
 		Fixes bug with vessels not rotating until unpacked once, and and not rotating at all when KSPCF is installed
 	Updated version file to use github for new version info
+
+1.9.2.1
+	Thanks to GitHub user @infradmin4KSP for this:
+		Added Russian localization
